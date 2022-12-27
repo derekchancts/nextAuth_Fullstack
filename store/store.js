@@ -8,8 +8,9 @@ const makeStore = () =>
   configureStore({
     reducer: {
       [authSlice.name]: authSlice.reducer,
-      // auth: authSlice.reducer,
       [postsSlice.name]: postsSlice.reducer,
+      // auth: authSlice.reducer,
+      // [api.reducerPath]: (state, action) => action.type !== HYDRATE ? api.reducer(state, action) : {...state, ...(action.payload)[api.reducerPath]},
     },
     devTools: true,
   });

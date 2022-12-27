@@ -1,4 +1,7 @@
 // import React, { useState, useEffect } from 'react'
+// import "../styles/PostCard.css"
+import '../styles/globals.css'
+
 import { SessionProvider } from "next-auth/react"
 import Layout from "../components/Layout";
 

@@ -16,6 +16,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, authFetch, logoutUser, selectCurrentUser } from '../store/authSlice'
+import { clearPosts } from '../store/postsSlice'
 
 
 
@@ -37,9 +38,6 @@ export default function ButtonAppBar() {
   useEffect(() => {
     //! check and see if we have a cookie or a session
     const user = cookies?.user ? JSON.parse(cookies.user) : session?.user ? session.user : "";
-    // setcurrentUser(user);
-
-    // dispatch(setUser(user))  //! if you decide to use redux
 
     //! if we have a user, then call "authFetch"
     if (user && user !== 'undefined' && user !== null ) {
@@ -60,8 +58,8 @@ export default function ButtonAppBar() {
 
     // LOGIC HERE TO UPDATE REDUX STATE
     dispatch(logoutUser());
+    dispatch(clearPosts());
 
-    // toast.success('Logout success 👌');
     router.push('/src/user/login')
   };
 
@@ -84,8 +82,9 @@ export default function ButtonAppBar() {
             </Link>
           </IconButton>
 
+        
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {currentUser && <p> user: {currentUser.email} </p>}
+            {currentUser && <p> user: {currentUser.name} </p>}
           </Typography>
 
           {/* <Link href="/src/user/author" passHref style={{ textDecoration: 'none' }} >
@@ -95,6 +94,12 @@ export default function ButtonAppBar() {
           <Box sx={{ ml: 2 }}>
             {currentUser ? (
               <>
+                <Link href="/src/posts/posts" passHref style={{ textDecoration: 'none' }} >
+                  <Button sx={{ color: 'white'}}>Posts</Button>
+                </Link>
+                <Link href="/src/posts/addpost" passHref style={{ textDecoration: 'none' }}>
+                  <Button sx={{ color: 'white'}}>Add Post</Button>
+                </Link>
                 <Button color="inherit" onClick={() => logoutHandler()}>Logout</Button>
               </>
             ) : (

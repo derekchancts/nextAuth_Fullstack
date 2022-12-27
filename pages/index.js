@@ -12,7 +12,6 @@ import axios from 'axios'
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import EmailIcon from '@mui/icons-material/Email';
 
-
 import {
   Avatar,
   Button,
@@ -26,19 +25,21 @@ import {
   Container
 } from "@mui/material";
 
-import Form from '../components/form/Form'
 import PostCard from "../components/posts/PostCard";
+import { selectPosts, postsFetch } from '../store/postsSlice'
 
 
 
 export default function Component({ session }) {
   const router = useRouter();
-  // const { data: session, status } = useSession();
-
+  
   const [currentLoggedInUser, setCurrentLoggedInUser] = useState('');
+  const [currentPosts, setcurrentPosts] = useState([]);
 
+  // const { data: session, status } = useSession();
   // console.log({session})
   // console.log({status})
+
 
   // useEffect(() => {
   //   const cookies = parseCookies();
@@ -49,15 +50,23 @@ export default function Component({ session }) {
   // }, [session?.user, router])
 
 
+  
   //! if use redux
   const dispatch = useDispatch();
   // const user = useSelector(state => state.auth.currentUser)
-  const user = useSelector(selectCurrentUser)
+  const user = useSelector(selectCurrentUser);
+
+  // const posts = useSelector(selectPosts);
+  // console.log({posts})
+
+
+  // useEffect(() => {
+  //   if(user) dispatch(postsFetch());
+  // }, [user, dispatch])
 
 
   useEffect(() => {
     if (!user) router.push("/src/user/login");
-
     setCurrentLoggedInUser(user);
   }, [user, router])
 
@@ -86,14 +95,8 @@ export default function Component({ session }) {
   return (
     <>
       {currentLoggedInUser && (
-        // <>
-        //   <Typography component="h1" variant="h5">
-        //     Dashboard
-        //   </Typography>
-        //   {`Logged in as: ` + currentLoggedInUser?.email}
-        // </>
-
-        <Container maxWidth="lg">
+ 
+        <Container maxWidth="xl">
           <Box
             sx={{
               marginTop: 1,
@@ -130,23 +133,6 @@ export default function Component({ session }) {
             </Typography>
 
           </Box>
-
-
-          <Grid container maxWidth="lg" sx={{ mt: '1rem' }} >
-
-          {/* <Grid item xs={8} sx={{ display: "flex", flexDirection: 'row', flexWrap: 'wrap'}}>
-            {posts && posts.map(post => (
-              <PostCard key={post._id} post={post} setUpdatePost={setUpdatePost} />
-            ))}
-          </Grid> */}
-
-            <Grid item xs={4}>
-              {/* <Form post={postData} setUpdatePost={setUpdatePost} />   */}
-              <Form  />  
-            </Grid>
-
-          </Grid>
-
 
         </Container>
       )}

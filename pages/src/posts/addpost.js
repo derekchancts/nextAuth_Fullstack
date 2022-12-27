@@ -12,11 +12,10 @@ import {
   Typography,
   Container,
 } from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import PostAddIcon from '@mui/icons-material/PostAdd';
 
 import { useRouter } from "next/router"
-import Router from 'next/router'
+// import Router from 'next/router'
 
 import FileBase from "react-file-base64"
 import axios from 'axios';
@@ -24,6 +23,8 @@ import { toast } from "react-toastify";
 
 // import { createPosts, updatePost } from "../../redux/posts/postActions"
 import { useDispatch, useSelector } from "react-redux"
+import { selectCurrentUser } from '../../../store/authSlice'
+
 
 
 function Form({ post, setUpdatePost }) {
@@ -38,6 +39,8 @@ function Form({ post, setUpdatePost }) {
   // const postGet = useSelector((state) => state.postGet)
   // console.log({postGet})
 
+  const user = useSelector(selectCurrentUser);
+
 
   function reset() {
     setMessage("")
@@ -46,6 +49,11 @@ function Form({ post, setUpdatePost }) {
     setTitle("")
     setSelectedFile("")
   };
+
+
+  useEffect(() => {
+    if (!user) router.push("/src/user/login");
+  }, [user, router])
 
 
   //! populate the form - for updating existing post 
@@ -75,11 +83,60 @@ function Form({ post, setUpdatePost }) {
   //     console.log(error)
   //   }
   // };
+
+  const getBase64 = file => {
+    return new Promise(resolve => {
+      let fileInfo;
+      let baseURL = "";
+      // Make new FileReader
+      let reader = new FileReader();
+
+      // Convert the file to base64 text
+      reader.readAsDataURL(file);
+
+      // on reader load somthing...
+      reader.onload = () => {
+        // Make a fileInfo Object
+        // console.log("Called", reader);
+        baseURL = reader.result;
+        // console.log(baseURL);
+        resolve(baseURL);
+      };
+      // console.log(fileInfo);
+    });
+  };
+
   
+  const types = ['image/png', 'image/jpeg'];
+
+  const handleChange = async (e) => {
+    let selected = e.target.files[0];
+
+    if (selected && types.includes(selected.type)) {
+      try {
+        const result = await getBase64(selected)
+        // console.log({result})
+        setSelectedFile(result)
+      } catch (error) {
+        console.log({error})
+      }
+      // setSelectedFile(selected);
+    } else {
+      alert('Please select an image file (png or jpg)');
+      setSelectedFile("");
+      return
+    }
+  };
+
 
 
   const SubmitHandler = async (e) => {
     e.preventDefault()
+
+    if (!creater || !title || !message || !tags || !selectedFile) {
+      alert('all fields must not be empty')
+      return
+    }
 
     let memoryData = {
       tags,
@@ -90,12 +147,19 @@ function Form({ post, setUpdatePost }) {
     }
 
     // dispatch(startLoading())
-    
-    console.log({memoryData})
+    console.log({memoryData});  
 
-    let config = { headers: { "Content-Type": "application/json" } };
-    const { data } = await axios.post('/api/posts', { memoryData }, config);
-    console.log(data)
+    
+    try {
+      let config = { headers: { "Content-Type": "application/json" } };
+      const { data } = await axios.post('/api/posts', { memoryData }, config);
+      console.log(data)
+
+      reset() 
+      router.push('/src/posts/posts')
+    } catch (err) {
+      console.error('Failed to save the post', err)
+    }
 
 
     /*
@@ -146,12 +210,12 @@ function Form({ post, setUpdatePost }) {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <PhotoCameraIcon />
+          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
+            <PostAddIcon />
           </Avatar>
 
           <Typography component="h1" variant="h5">
-            Post {post ? "Edit" : "Capture"}
+            {post ? "Edit" : "Add"} Post
           </Typography>
 
           {post && (
@@ -226,11 +290,12 @@ function Form({ post, setUpdatePost }) {
               </Grid>
 
               <Grid item xs={12}>
-                <FileBase
+                {/* <FileBase
                   type="file"
                   multiple={false}
                   onDone={({ base64 }) => setSelectedFile(base64)}
-                />
+                /> */}
+                 <input type="file" onChange={handleChange}/>
               </Grid>
             </Grid>
 
@@ -249,7 +314,7 @@ function Form({ post, setUpdatePost }) {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 2, mb: 2, backgroundColor: "secondary.main" }}
+              sx={{ mt: 2, mb: 2, backgroundColor: "primary.main" }}
             >
               { post ? "Edit" : "Submit" }
             </Button>

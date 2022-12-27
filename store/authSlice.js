@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { HYDRATE } from "next-redux-wrapper";
 
-import { parseCookies } from "nookies";
-import { useSession } from "next-auth/react";
+// import { parseCookies } from "nookies";
+// import { useSession } from "next-auth/react";
 import axios from 'axios';
 
 
@@ -35,7 +35,7 @@ export const authFetch = createAsyncThunk(
 const initialState = {
   //currentUser: user,
   currentUser: null,
-  loading: 'idle',
+  loading: false,
   error: null,
 };
 
@@ -51,7 +51,7 @@ export const authSlice = createSlice({
     logoutUser(state, action) {
       // state = initialState
       state.currentUser = null
-      state.loading = 'idle'
+      state.loading = false
       state.error = null
     },
   },
@@ -59,26 +59,6 @@ export const authSlice = createSlice({
     //! Special reducer for hydrating the state. Special case for next-redux-wrapper
     extraReducers: (builder) => {
       builder
-
-      // [HYDRATE]: (state, action) => {
-      //   return {
-      //     ...state,
-      //     ...action.payload.auth,
-      //   };
-      // },
-
-      // [authFetch.pending]: (state, action) => {
-      //   state.loading = 'pending'
-      // },
-      // [authFetch.fulfilled]: (state, action) => {
-      //   state.currentUser = action.payload
-      //   state.loading = 'success'
-      // },
-      // [authFetch.rejected]: (state, action) => {
-      //   state.loading = 'rejected'
-      //   state.error = action.payload
-      // }
-
     .addCase(authFetch.pending, (state, action) => {
       state.loading = 'pending'
     })
@@ -90,8 +70,29 @@ export const authSlice = createSlice({
       state.loading = 'rejected'
       state.error = action.payload
     })
+    }
 
-  },
+    // extraReducers: {
+    //   [HYDRATE]: (state, action) => {
+    //     return {
+    //       ...state,
+    //       ...action.payload.auth,
+    //     };
+    //   },
+
+    //   [authFetch.pending]: (state, action) => {
+    //     state.loading = 'pending'
+    //   },
+    //   [authFetch.fulfilled]: (state, action) => {
+    //     state.currentUser = action.payload
+    //     state.loading = 'success'
+    //   },
+    //   [authFetch.rejected]: (state, action) => {
+    //     state.loading = 'rejected'
+    //     state.error = action.payload
+    //   }
+    // }
+
  
 });
 

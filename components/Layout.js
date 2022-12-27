@@ -4,10 +4,12 @@ import { Container } from '@mui/material'
 
 const Layout = ({ children }) => {
   return (
-    <Container >
-      <Header />
-      { children }
-    </Container>
+    <>
+      {/* <Container > */}
+        <Header />
+        { children }
+      {/* </Container> */}
+    </>
   )
 }
 

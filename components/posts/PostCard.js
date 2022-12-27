@@ -1,3 +1,4 @@
+import styles from './PostCard.module.css'
 import {
   Avatar,
   Button,
@@ -21,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux"
 import axios from 'axios'
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { selectCurrentUser } from '../../store/authSlice'
 
 
 
@@ -32,16 +34,13 @@ const PostCard = ({ post, setUpdatePost }) => {
   // const postGet = useSelector(state => state.postGet)
   // console.log({postGet})
 
-  // const profile = useSelector(state => state.profile)
-  // const { loading, error, dbUser } = profile;
-
+  const user = useSelector(selectCurrentUser);  
 
 
   const deletePost = async (id) => {
     let answer = window.confirm("Are you sure you want to delete")
-    if (!answer) {
-      return
-    }
+    if (!answer) return
+    
     dispatch(postDelete(id))     // PROBLEM HERE AS LOADING IS UPDATED IN REDUX
     // console.log({postGet})    // BUT LOCAL STATE (POSTGET) NOT UPDATING IMMEDIATELY
 
@@ -86,7 +85,7 @@ const PostCard = ({ post, setUpdatePost }) => {
 
 
   const likePost = async (id) => {
-    const hasLiked = post?.likes.includes(dbUser?._id)  // checks and see if the user is already liked the current post
+    const hasLiked = post?.likes.includes(user?._id)  // checks and see if the user is already liked the current post
     // console.log({hasLiked})
     if (!hasLiked) {
       try {
@@ -109,26 +108,28 @@ const PostCard = ({ post, setUpdatePost }) => {
 
   return (
     <>
-    <Card sx={{ maxWidth: 230, maxHeight: 440, ml: '1rem', my: '1rem' }} >
+    <Card sx={{ minWidth: 300, maxWidth: 300, minHight: 500, maxHeight: 500, ml: '1rem', my: '1rem' }} >
       <CardMedia
         component="img"
         height="140"
         image={post?.image}
-        alt="green iguana"
+        alt="post"
       />
       <CardContent sx={{ minHeight: 210 }}>
-        <Typography gutterBottom variant="h4" component="div">
+        <Typography gutterBottom variant="h4" component="div" sx={{ minHeight: 100, maxHeight: 100 }} className={styles.title}>
           {post?.title}
         </Typography>
         <Typography gutterBottom variant="h6" component="div">
-          {post?.creater}
+          author: {post?.creater}
         </Typography>
 
-        <Typography variant="body2" color="text.secondary" sx={{ mt: '1rem' }}>
-          {post?.message.length > 60 ? post?.message.substring(0, 60) + '...' : post?.message }
-        </Typography>
+        <Box sx={{ minHeight: 50, maxHeight: 50 }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: '1rem' }}>
+            {post?.message.length > 60 ? post?.message.substring(0, 60) + '...' : post?.message }
+          </Typography>
+        </Box>
         
-        <Typography variant="body2" color="text.secondary" sx={{ mt: '1rem' }}>
+        <Typography variant="body2" color="text.secondary" sx={{ mt: '1.5rem' }}>
           {/* {post?.tags.map(tag => tag.length > 22 ? `${tag.substring(0, 22)} + ...` : post?.tags )} */}
           {post?.tags.map((tag) =>
               tag.length > 22 ? `#${tag.substring(22, 0)}` + "..." : `#${tag} `
@@ -145,7 +146,7 @@ const PostCard = ({ post, setUpdatePost }) => {
               // onClick={() => likePost(post._id)} 
               >
                 Like
-                { post?.likes.includes(dbUser?._id) ? 
+                { post?.likes.includes(user?._id) ? 
                   (<ThumbUpIcon sx={{ ml: "0.25rem", mt: "-0.3rem" }}/>) : 
                   (<ThumbUpAltOutlinedIcon sx={{ ml: "0.25rem", mt: "-0.3rem" }} />) 
                 }
@@ -158,21 +159,28 @@ const PostCard = ({ post, setUpdatePost }) => {
             </Typography>
           </Grid>
           
-          {router.pathname === '/src/user/dashboard' && (
-          <Grid container sx={{ display: 'flex', justifyContent: 'space-between'}}>
+          
+          {/* {router.pathname === '/src/user/dashboard' && ( */}
+          {router.pathname === '/src/posts' && (
+          <Grid container sx={{ display: 'flex', justifyContent: 'center'}} gap={2}>
             <Button 
               size="small" 
+              variant="outlined"
+              onClick={() => setUpdatePost(post._id)} 
+            >
+                Update
+                {/* <EditIcon sx={{ ml: "0.25rem" }} /> */}
+              </Button>
+
+            <Button 
+              size="small"
+              variant="outlined"
+              color="error" 
               // onClick={() => deletePost(post._id)} 
               sx={{ mr: "0.5rem" }} >
                 Delete
-                <DeleteIcon sx={{ ml: "0.25rem" }}/>
+                {/* <DeleteIcon sx={{ ml: "0.25rem" }}/> */}
             </Button>
-            <Button 
-              size="small" 
-              onClick={() => setUpdatePost(post._id)} >
-                Update
-                <EditIcon sx={{ ml: "0.25rem" }} />
-              </Button>
           </Grid>
           )}
 
