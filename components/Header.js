@@ -40,10 +40,8 @@ export default function ButtonAppBar() {
     const user = cookies?.user ? JSON.parse(cookies.user) : session?.user ? session.user : "";
 
     //! if we have a user, then call "authFetch"
-    if (user && user !== 'undefined' && user !== null ) {
-      dispatch(authFetch(user))
-    }
-
+    if (user && user !== 'undefined' && user !== null) dispatch(authFetch(user))
+    
     setcurrentUser(user)
   }, [cookies.user, session, dispatch])
 

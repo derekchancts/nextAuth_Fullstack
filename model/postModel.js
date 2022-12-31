@@ -21,6 +21,19 @@ const postSchema = mongoose.Schema({
   image: { 
     type: String 
   },
+  imageUrl: { 
+    type: String 
+  },
+  // image: {
+  //   public_id: {
+  //     type: String,
+  //     required: true
+  //   },
+  //   url: {
+  //     type: String,
+  //     required: true
+  //   }
+  // },
   likeCount: { 
     type: Number, 
     default: 0 

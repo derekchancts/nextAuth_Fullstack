@@ -39,9 +39,7 @@ const Login = ({ csrfToken, providers }) => {
     const cookies = parseCookies();
     // const user = cookies?.user ? JSON.parse(cookies.user) : session?.user ? session.user : "" ;
     const user = cookies?.user ? JSON.parse(cookies.user) : "";
-    if (user) {
-      router.push("/")
-    }
+    if (user) router.push("/");
   }, [router])
 
 

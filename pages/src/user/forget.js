@@ -107,12 +107,12 @@ const Forget = () => {
 
               <Grid container>
                 <Grid item xs>
-                  <Link href="/src/user/login" variant="body2" style={{ textDecoration: 'none' }}>
+                  <Link href="/src/user/login" variant="body2" style={{ textDecoration: 'none', fontSize: '.95rem' }}>
                     Have an account ? Login
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="/src/user/register" variant="body2" style={{ textDecoration: 'none' }}>
+                  <Link href="/src/user/register" variant="body2" style={{ textDecoration: 'none', fontSize: '.95rem' }}>
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>

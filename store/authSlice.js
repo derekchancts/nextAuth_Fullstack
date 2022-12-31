@@ -100,5 +100,7 @@ export const authSlice = createSlice({
 export const { setUser, logoutUser } = authSlice.actions;
 
 export const selectCurrentUser = (state) => state.auth.currentUser;
+export const selectUserLoading = (state) => state.auth.loading;
+export const selectUserError = (state) => state.auth.error;
 
 export default authSlice.reducer;

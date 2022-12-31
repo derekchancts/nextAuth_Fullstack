@@ -24,6 +24,7 @@ import { toast } from "react-toastify";
 // import { createPosts, updatePost } from "../../redux/posts/postActions"
 import { useDispatch, useSelector } from "react-redux"
 import { selectCurrentUser } from '../../../store/authSlice'
+import { postAdd, selectPosts, selectPostsLoading, selectPostsError } from '../../../store/postsSlice'
 
 
 
@@ -36,10 +37,9 @@ function Form({ post, setUpdatePost }) {
 
   const router = useRouter()
   const dispatch = useDispatch()
-  // const postGet = useSelector((state) => state.postGet)
-  // console.log({postGet})
 
   const user = useSelector(selectCurrentUser);
+  const loading = useSelector(selectPostsLoading);
 
 
   function reset() {
@@ -55,34 +55,6 @@ function Form({ post, setUpdatePost }) {
     if (!user) router.push("/src/user/login");
   }, [user, router])
 
-
-  //! populate the form - for updating existing post 
-  useEffect(() => {
-    if (post) {
-      setMessage(post.message)
-      setTags(post.tags)
-      setCreater(post.creater)
-      setTitle(post.title)
-      // setSelectedFile(post.image)
-    }
-  }, [post])
-
-
-
-  // const updatePost = async (id, memoryData) => {
-  //   const config = {
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   }
-
-  //   try {
-  //     const { data } = await axios.put(`/api/posts/${id}`, { memoryData }, config )
-  //     console.log({data})
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // };
 
   const getBase64 = file => {
     return new Promise(resolve => {
@@ -107,10 +79,20 @@ function Form({ post, setUpdatePost }) {
   };
 
   
-  const types = ['image/png', 'image/jpeg'];
+  const types = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg', 'image/webp'];
+
 
   const handleChange = async (e) => {
     let selected = e.target.files[0];
+
+    //! restrict the size of the image that can be uploaded
+    // const MAX_FILE_SIZE = 1024 // 1MB
+    // const fileSizeKiloBytes = selected.size / 1024
+
+    // if (fileSizeKiloBytes > MAX_FILE_SIZE) {
+    //   alert("File size should be less tnan 1 MB")
+    //   return
+    // };
 
     if (selected && types.includes(selected.type)) {
       try {
@@ -120,12 +102,12 @@ function Form({ post, setUpdatePost }) {
       } catch (error) {
         console.log({error})
       }
-      // setSelectedFile(selected);
     } else {
       alert('Please select an image file (png or jpg)');
       setSelectedFile("");
       return
     }
+
   };
 
 
@@ -138,63 +120,27 @@ function Form({ post, setUpdatePost }) {
       return
     }
 
-    let memoryData = {
+    let postData = {
       tags,
       image: selectedFile,
       message,
       creater,
       title,
     }
-
-    // dispatch(startLoading())
-    console.log({memoryData});  
-
     
+    // console.log({postData});  
+
     try {
-      let config = { headers: { "Content-Type": "application/json" } };
-      const { data } = await axios.post('/api/posts', { memoryData }, config);
-      console.log(data)
+      // let config = { headers: { "Content-Type": "application/json" } };
+      // const { data } = await axios.post('/api/posts', { postData }, config);
+      // console.log(data)
+      dispatch(postAdd(postData)).unwrap()
 
       reset() 
       router.push('/src/posts/posts')
     } catch (err) {
       console.error('Failed to save the post', err)
-    }
-
-
-    /*
-    if (post) {
-      // updatePost(post._id, memoryData)
-      dispatch(updatePost(post._id, memoryData))   // PROBLEM HERE AS LOADING IS UPDATED IN REDUX
-      // console.log({postGet})                       // BUT LOCAL STATE (POSTGET) NOT UPDATING IMMEDIATELY
-      // console.log(postGet.error, postGet.loading)   
-
-      if (postGet.error || postGet.error !== null) {
-        console.log(postGet.error)
-        // return toast.error(postGet.error)
-        return toast.error('failed to update post')
-      } 
-
-      if (postGet.error === null && !postGet.loading) {
-        toast.success("post updated")
-        memoryData = {}
-        reset();
-        // router.push('/src/user/profile');
-      }
-    } else {
-      dispatch(createPosts(memoryData))
-      if (postGet.error || postGet.error !== null) {
-        console.log(postGet.error)
-        // return toast.error(postGet.error)
-        return toast.error('failed to create post')
-      }
-
-      toast.success("post created")
-      memoryData = {}
-      reset();
-      // router.push('/src/user/profile');   // NEED TO CHANGE THIS AFTER REDUX IS UPDATED
     } 
-    */
   };
 
 
@@ -215,7 +161,7 @@ function Form({ post, setUpdatePost }) {
           </Avatar>
 
           <Typography component="h1" variant="h5">
-            {post ? "Edit" : "Add"} Post
+            Add Post
           </Typography>
 
           {post && (
@@ -315,8 +261,10 @@ function Form({ post, setUpdatePost }) {
               fullWidth
               variant="contained"
               sx={{ mt: 2, mb: 2, backgroundColor: "primary.main" }}
+              // disabled="true"
+              disabled={loading === 'pending' ? true : false}
             >
-              { post ? "Edit" : "Submit" }
+              { loading === 'pending' ? "Submitting..." : "Submit" }
             </Button>
 
           </Box>
