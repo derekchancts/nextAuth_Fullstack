@@ -20,6 +20,8 @@ const cors = initMiddleware(
 // const handler = async (req, res) => {
 const handler = Authenticated(async (req, res) => {
 
+  console.log(req.method)
+
   //! Run cors
   await cors(req, res)
 
@@ -28,27 +30,27 @@ const handler = Authenticated(async (req, res) => {
   
   //! update a post
   if (req.method === "PUT") {
-    // console.log(req.user)
-    //! if (!req.user) return res.status(404).json({ error: "unauthenticated" })
+    console.log(req.user)
+    if (!req.user) return res.status(404).json({ error: "unauthenticated" })
 
-    // console.log(req.method)
+    console.log(req.method)
     // console.log(req.query)
     // console.log(req.body)
     const { id } = req.query;
     // console.log(id)
 
     if (req.body) {
-      //! req.body.postData.userId = req.user._id.toString()   // req.user._id is an object. so need to turn it to a string
+      req.body.userId = req.user._id.toString()   // req.user._id is an object. so need to turn it to a string
       // const { tags, image, message, creater, title, userId } = req.body.postData;
-      //! const { tags, message, creater, title, userId } = req.body;
-      const { tags, message, creater, title } = req.body;
+      const { tags, message, creater, title, userId } = req.body;
+      // const { tags, message, creater, title } = req.body;
     
       // FIND POST
       const post = await Post.find({ _id: id })
       if (!post) return res.status(404).send({ error: 'no post found' })
       
       // if (post) console.log(post)
-      //! if (post[0].userId !== req.user._id.toString()) return res.status(404).json({ error: `invalid user`})
+      if (post[0].userId !== req.user._id.toString()) return res.status(404).json({ error: `invalid user`})
 
       try {
         // UPDATE POST
@@ -63,8 +65,8 @@ const handler = Authenticated(async (req, res) => {
           },
           { new: true }
         )
-        // await updatedPost.save()  
-        // console.log(updatedPost)
+        //! await updatedPost.save()  
+        console.log(updatedPost)
 
         return res.status(200).json({ success: 'post updated successfully', updatedPost })
       } catch (err) {
@@ -135,14 +137,14 @@ const handler = Authenticated(async (req, res) => {
     console.log(req.method)
     // console.log(req.user._id.toString())
   
-    //! if (!req.user) return res.status(404).json({ error: 'unauthenticated' })
+    if (!req.user) return res.status(404).json({ error: 'unauthenticated' })
     
     const { id } = req.query
     const post = await Post.find({ _id: id })
     if (!post) return res.status(404).json({ error: 'no post found' })
     // console.log(post1[0]?.userId)
 
-    //! if (post[0].userId !== req.user._id.toString()) return res.status(404).json({ error: `invalid user`})
+    if (post[0].userId !== req.user._id.toString()) return res.status(404).json({ error: `invalid user`})
     
     try {
       const deletedPost = await Post.findByIdAndDelete({ _id: id })

@@ -76,17 +76,24 @@ const PostCard = ({ post }) => {
     // if (!answer) return
 
     // dispatch(resetStatus());
+    // console.log({id})
+    // console.log(typeof(id))
 
     confirm({ description: "Are you sure you want to delete?" })
     .then(() => {
       dispatch(resetStatus());
-      dispatch(postDelete(id))      
 
+      try {
+        dispatch(postDelete(id))  
+      } catch (error) {
+        console.log(error)
+      }
+         
       // if (loading === 'success' && !error) {
       //   return toast.success("post deleted")
       // }
     })
-    .catch((err) => console.log(err))
+
   };
 
 
@@ -116,7 +123,19 @@ const PostCard = ({ post }) => {
 
   return (
     <>
-    <Card sx={{ minWidth: 300, maxWidth: 300, minHight: 550, maxHeight: 550, ml: '1rem', my: '1rem', borderRadius: 4 }} >
+    <Card 
+      sx={{ 
+        minWidth: 300, 
+        maxWidth: 300, 
+        minHight: 550, 
+        maxHeight: 550, 
+        ml: '1rem', 
+        my: '1rem', 
+        borderRadius: 4, 
+        // border: 1, 
+        // borderColor: 'primary.main',
+        boxShadow: 2
+       }}>
 
       {/* <CardMedia
         component="img"
@@ -135,7 +154,12 @@ const PostCard = ({ post }) => {
 
 
       <CardContent sx={{ minHeight: 210 }}>
-        <Typography gutterBottom variant="h4" component="div" sx={{ minHeight: 100, maxHeight: 100 }} className={styles.title}>
+        <Typography 
+          gutterBottom variant="h4" 
+          component="div" 
+          sx={{ minHeight: 80, maxHeight: 80, display: "flex" , alignItems: 'center', justifyContent: 'center'}} 
+          className={styles.title}
+        >
           {post?.title}
         </Typography>
         <Typography gutterBottom variant="h6" component="div">
@@ -182,7 +206,8 @@ const PostCard = ({ post }) => {
           
           
           {/* {router.pathname === '/src/user/dashboard' && ( */}
-          {router.pathname === '/src/posts/posts' && (
+          {/* {router.pathname === '/src/posts/posts' && ( */}
+        {post.userId === user._id && (
           <Grid container sx={{ display: 'flex', justifyContent: 'center', mt: '10px'}} gap={2}>
 
            <Link 
@@ -208,7 +233,7 @@ const PostCard = ({ post }) => {
             > Delete
             </Button>
           </Grid>
-          )}
+        )} 
 
         </Grid>
       </CardActions>

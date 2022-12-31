@@ -2,7 +2,7 @@ import { useState, useEffect} from 'react'
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { selectPosts, postsFetch, selectPostsLoading, selectPostsError } from '../../../store/postsSlice'
+import { selectPosts, postsFetch, selectPostsLoading, selectPostsError, resetStatus } from '../../../store/postsSlice'
 import { selectCurrentUser, selectUserLoading, selectUserError, authFetch } from '../../../store/authSlice'
 import PostCard from '../../../components/posts/PostCard'
 
@@ -21,6 +21,7 @@ import {
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { ConfirmProvider } from "material-ui-confirm";
+import { toast } from "react-toastify";
 
 import { parseCookies } from "nookies";
 import { useSession } from "next-auth/react";
@@ -58,7 +59,7 @@ const Posts = () => {
   const { data: session } = useSession();
   const cookies = parseCookies();
 
-
+ 
   useEffect(() => {
     //! check and see if we have a cookie or a session
     const user = cookies?.user ? JSON.parse(cookies.user) : session?.user ? session.user : "";
@@ -142,19 +143,24 @@ const Posts = () => {
   )}
   
   
+  // if (postserror) {
+  //   return (
+  //     <Box sx={{ 
+  //       mt: '2rem',
+  //       display: "flex",
+  //       flexDirection: "column",
+  //       alignItems: "center",
+  //     }}>
+  //       <Typography component="h1" variant="h4">
+  //         {postserror}
+  //       </Typography>
+  //     </Box> 
+  // )}
+
   if (postserror) {
-    return (
-      <Box sx={{ 
-        mt: '2rem',
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}>
-        <Typography component="h1" variant="h4">
-          {postserror}
-        </Typography>
-      </Box> 
-  )}
+    toast(postserror)
+    dispatch(resetStatus())
+  }
 
 
   return (

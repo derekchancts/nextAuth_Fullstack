@@ -3,7 +3,6 @@ import { HYDRATE } from "next-redux-wrapper";
 import axios from 'axios';
 import { parseCookies } from "nookies"
 
-
 const cookies = parseCookies();
 
 
@@ -35,12 +34,13 @@ export const postAdd = createAsyncThunk(
     const config = {
       headers: {
         "Content-Type": "application/json",
-        // Authorization: `Bearer ${cookies.token}`,
+        Authorization: `Bearer ${cookies.token}`,
       },
     }
 
     try {
-      const { data } = await axios.post('/api/posts', { postData }, config);
+      // const { data } = await axios.post('/api/posts', { postData }, config);
+      const { data } = await axios.post('/api/posts/create', { postData }, config);
       console.log(data)
       return data;
     } catch (error) {
@@ -62,7 +62,7 @@ export const postUpdate = createAsyncThunk(
     const config = {
       headers: {
         "Content-Type": "application/json",
-        // Authorization: `Bearer ${cookies.token}`,
+        Authorization: `Bearer ${cookies.token}`,
       },
     }
 
@@ -73,7 +73,9 @@ export const postUpdate = createAsyncThunk(
     } catch (error) {
       console.log(error);
       // return rejectWithValue(error.response.data)
-      return rejectWithValue("an error occurred")
+      // return rejectWithValue("an error occurred")
+      const payload = error.response && error.response.data.error ? error.response.data.error : error.message;
+      return rejectWithValue(payload)
     }
   }
 );
@@ -83,23 +85,29 @@ export const postUpdate = createAsyncThunk(
 export const postDelete = createAsyncThunk(
   "posts/postDelete",
   async (id, { rejectWithValue }) => {
-    console.log('id' + id)
+    // console.log('id' + id)
 
     const config = {
       headers: {
         "Content-Type": "application/json",
-        // Authorization: `Bearer ${cookies.token}`,
+        Authorization: `Bearer ${cookies.token}`,
       },
     }
 
     try {
-      const { data } = await axios.delete(`/api/posts/${id}`, {}, config);
+      const { data } = await axios.delete(`/api/posts/${id}`, config);
       console.log(data)
       return data;
     } catch (error) {
-      console.log(error);
-      // return rejectWithValue(error.response.data)
-      return rejectWithValue("an error occurred")
+      // console.log(error);
+      // console.log(error.response.data.error);
+      // return rejectWithValue(error.response.data.error)
+
+      const payload = error.response && error.response.data.error ? error.response.data.error : error.message;
+      return rejectWithValue(payload)
+
+      // return rejectWithValue("an error occurred")
+      // throw Error(error);
     }
   }
 );
@@ -194,8 +202,21 @@ export const postsSlice = createSlice({
     .addCase(postDelete.rejected, (state, action) => {
       state.loading = 'rejected'
       state.error = action.payload
+      // state.error = action.error.message;
     })
 
+    .addCase(postUpdate.pending, (state, action) => {
+      state.loading = 'pending'
+    })
+    .addCase(postUpdate.fulfilled, (state, action) => {
+      let index = state.posts.findIndex((post) => post._id === action.payload.updatedPost._id);
+      state.posts[index] = action.payload.updatedPost;
+      state.loading = 'success'
+    })
+    .addCase(postUpdate.rejected, (state, action) => {
+      state.loading = 'rejected'
+      state.error = action.payload
+    })
 
     .addCase(postLike.pending, (state, action) => {
       state.loading = 'pending'

@@ -142,7 +142,8 @@ const EditPost = () => {
                   label="Creater"
                   autoFocus
                   value={creater}
-                  onChange={(e) => setCreater(e.target.value)}
+                  // onChange={(e) => setCreater(e.target.value)}
+                  disabled
                 />
               </Grid>
 

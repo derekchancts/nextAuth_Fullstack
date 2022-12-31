@@ -1,4 +1,5 @@
 import Post from "../../../model/postModel"
+import Authenticated from "../../../middleware/isAuth"
 
 import Cors from 'cors'
 import initMiddleware from '../../../lib/init-middleware'
@@ -11,34 +12,27 @@ const cors = initMiddleware(
   Cors({
     // Only allow requests with GET, POST and OPTIONS
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    // methods: ['POST', 'OPTIONS'],
   })
 )
 
 
 
-export default async function handler (req, res) {
-  // console.log(req.method)
-
-
-  //! get all posts
-  if (req.method === "GET") {
-    try {
-      const posts = await Post.find({})
-      // console.log(posts)
-
-      return res.status(200).json(posts)
-    } catch (err) {
-      return res.status(404).json({ error: err.message })
-    }
-  };
-
+const handler = Authenticated(async (req, res) => { 
+  // Run cors
+  await cors(req, res)
 
   
-  //! create a new post
-  if (req.method === "POST") {
+  if (req.method === 'POST') {
+    // console.log(req.user)
+    if (!req.user) return res.status(404).json({ error: "Please login" })
+    
+    // const post = req.body.postData;
+    req.body.postData.userId = req.user._id.toString()  // req.user._id is an object. so need to turn it to a string
+
     const post = req.body.postData
     console.log('Post: ' + post)
-    // console.log(req.method)
+    
 
     const { image } = req.body.postData;
 
@@ -67,23 +61,32 @@ export default async function handler (req, res) {
         // }
     });
 
+    // const newPost = new Post(req.body.postData)
     const newPost = await new Post(post)
-
+    
     try {
-      await newPost.save();
+      await newPost.save()
+
+      // const newPost = await Post.create(req.body.postData)  // 2nd method to create post
+      // const newPost = await Post.create(post)  // 2nd method to create post
+
       return res.status(201).json(newPost)
     } catch (err) {
       return res.status(409).json({ error: err.message })
     }
-  };
 
-}
+  }
+})
+
+
+export default handler;
+
 
 
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: '100mb',
+      sizeLimit: '5mb',
     },
   },
 }

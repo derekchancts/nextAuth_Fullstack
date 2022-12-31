@@ -11,6 +11,10 @@ import {
   Box,
   Typography,
   Container,
+  Select,
+  FormControl,
+  InputLabel,
+  MenuItem
 } from "@mui/material";
 import PostAddIcon from '@mui/icons-material/PostAdd';
 
@@ -115,7 +119,8 @@ function Form({ post, setUpdatePost }) {
   const SubmitHandler = async (e) => {
     e.preventDefault()
 
-    if (!creater || !title || !message || !tags || !selectedFile) {
+    // if (!creater || !title || !message || !tags || !selectedFile) {
+    if (!title || !message || !tags || !selectedFile) {
       alert('all fields must not be empty')
       return
     }
@@ -124,7 +129,7 @@ function Form({ post, setUpdatePost }) {
       tags,
       image: selectedFile,
       message,
-      creater,
+      creater: user.name,
       title,
     }
     
@@ -182,7 +187,21 @@ function Form({ post, setUpdatePost }) {
 
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField
+
+              <FormControl fullWidth>
+                <InputLabel id="creater">Creator</InputLabel>
+                <Select
+                  labelId="creater"
+                  id="creater"
+                  value={user._id}
+                  label="Age"
+                  // onChange={handleChange}
+                >
+                  <MenuItem value={user._id}>{user.name}</MenuItem>
+                </Select>
+              </FormControl>
+
+                {/* <TextField
                   autoComplete="creater"
                   name="creater"
                   required
@@ -190,9 +209,11 @@ function Form({ post, setUpdatePost }) {
                   id="creater"
                   label="Creater"
                   autoFocus
-                  value={creater}
-                  onChange={(e) => setCreater(e.target.value)}
-                />
+                  // value={creater}
+                  // onChange={(e) => setCreater(e.target.value)}
+                  value={user._id}
+                  disabled
+                /> */}
               </Grid>
 
               <Grid item xs={12}>

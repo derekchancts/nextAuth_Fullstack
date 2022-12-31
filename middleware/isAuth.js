@@ -118,11 +118,11 @@ const Authenticated = (component) => async (req, res) => {
   // console.log(req.headers.authorization)
   if (req.headers && req.headers?.authorization) {
     let token = req.headers.authorization.split(' ')[1]
-    console.log(token)
+    //! console.log(token)
 
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-    console.log(decoded)
-    console.log(decoded.userid)
+    //! console.log(decoded)
+    //! console.log(decoded.userid)
     
     // const id = mongoose.Types.ObjectId(decoded.userid)   //! output: new ObjectId("id.....")
     // console.log(id)
@@ -132,7 +132,7 @@ const Authenticated = (component) => async (req, res) => {
     // const user = await User.findById({ _id: ObjectId(decoded.userId) })
     // const user = await User.findById({ _id: id })
     const user = await User.findById({ _id: mongoose.Types.ObjectId(decoded.userid) })
-    console.log(user)
+    //! console.log(user)
     
     req.user = user;
     return component(req, res)
