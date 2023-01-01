@@ -13,7 +13,9 @@ import {
   Typography,
   Container,
   Card, CardActions, CardContent, CardMedia,
-  Paper
+  Paper,
+  IconButton,
+  Stack
 } from "@mui/material";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
@@ -205,10 +207,9 @@ const PostCard = ({ post }) => {
           </Grid>
           
           
-          {/* {router.pathname === '/src/user/dashboard' && ( */}
           {/* {router.pathname === '/src/posts/posts' && ( */}
         {post.userId === user._id && (
-          <Grid container sx={{ display: 'flex', justifyContent: 'center', mt: '10px'}} gap={2}>
+          <Grid container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: '10px'}} gap={2}>
 
            <Link 
              href={{
@@ -220,18 +221,26 @@ const PostCard = ({ post }) => {
                 size="small" 
                 variant="outlined"
                 // onClick={() => updatePost(post._id)} 
+                sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
               > Update
               </Button>
             </Link>
+     
+              <Button 
+                size="small"
+                variant="outlined"
+                color="error" 
+                onClick={() => deletePost(post._id)} 
+                // sx={{ mr: "0.5rem" }} 
+              > Delete
+              </Button>
 
-            <Button 
-              size="small"
-              variant="outlined"
-              color="error" 
-              onClick={() => deletePost(post._id)} 
-              sx={{ mr: "0.5rem" }} 
-            > Delete
-            </Button>
+              {/* <Button variant="outlined" sx={{height: 30, m: 1, p: 1}}>
+                <Stack direction="column" alignItems="center" justifyContent={"center"}>
+                  <Typography>Saved</Typography>
+                </Stack>
+              </Button> */}
+           
           </Grid>
         )} 
 

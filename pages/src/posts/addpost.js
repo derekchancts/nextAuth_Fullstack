@@ -29,6 +29,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux"
 import { selectCurrentUser } from '../../../store/authSlice'
 import { postAdd, selectPosts, selectPostsLoading, selectPostsError } from '../../../store/postsSlice'
+import AuthWrapper from "../../../components/auth/authWrapper";
 
 
 
@@ -151,7 +152,7 @@ function Form({ post, setUpdatePost }) {
 
 
   return (
-    <>
+    <AuthWrapper>
       <Container component="main" maxWidth="xs">
         <Box
           sx={{
@@ -169,14 +170,6 @@ function Form({ post, setUpdatePost }) {
             Add Post
           </Typography>
 
-          {post && (
-            <Button 
-              onClick={() => {
-                setUpdatePost("")
-                reset();
-              }}
-            >Clear</Button>
-          )}
 
           <Box
             component="form"
@@ -193,11 +186,12 @@ function Form({ post, setUpdatePost }) {
                 <Select
                   labelId="creater"
                   id="creater"
-                  value={user._id}
+                  value={user?._id}
                   label="Age"
                   // onChange={handleChange}
+                  disabled
                 >
-                  <MenuItem value={user._id}>{user.name}</MenuItem>
+                  <MenuItem value={user?._id}>{user?.name}</MenuItem>
                 </Select>
               </FormControl>
 
@@ -291,7 +285,7 @@ function Form({ post, setUpdatePost }) {
           </Box>
         </Box>
       </Container>
-    </>
+    </AuthWrapper>
   )
 }
 

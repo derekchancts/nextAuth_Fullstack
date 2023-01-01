@@ -27,6 +27,7 @@ import {
 
 import PostCard from "../components/posts/PostCard";
 import { selectPosts, postsFetch } from '../store/postsSlice'
+import AuthWrapper from "../components/auth/authWrapper";
 
 
 
@@ -93,7 +94,7 @@ export default function Component({ session }) {
 
 
   return (
-    <>
+    <AuthWrapper>
       {currentLoggedInUser && (
  
         <Container maxWidth="xl">
@@ -136,7 +137,7 @@ export default function Component({ session }) {
 
         </Container>
       )}
-    </>
+    </AuthWrapper>
   )
 
 }

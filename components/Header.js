@@ -92,6 +92,9 @@ export default function ButtonAppBar() {
           <Box sx={{ ml: 2 }}>
             {currentUser ? (
               <>
+                {/* <Link href="/src/posts/paginatePosts" passHref style={{ textDecoration: 'none' }} >
+                  <Button sx={{ color: 'white'}}>Pagination</Button>
+                </Link> */}
                 <Link href="/src/posts/posts" passHref style={{ textDecoration: 'none' }} >
                   <Button sx={{ color: 'white'}}>Posts</Button>
                 </Link>

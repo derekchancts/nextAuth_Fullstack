@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles"
-import { red, blue, orange, green, purple } from "@mui/material/colors"
+import { red, blue, orange, green, purple, yellow } from "@mui/material/colors"
 
 
 // Create a theme instance.
@@ -36,5 +36,22 @@ const theme = createTheme({
     },
   },
 })
+ 
+
+export const darkTheme = createTheme({
+  palette: {
+    primary: {
+      // main: "#fff",
+      main: '#c51162',
+      // main: "hsl(223, 70%, 80%);",
+    },
+    secondary: {
+      main: yellow[300]
+    },
+    mode: 'light'
+  } 
+});
+
+
 
 export default theme

@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import CircularProgress from '@mui/material/CircularProgress';
+import AuthWrapper from "../../../components/auth/authWrapper"
 
 
 
@@ -106,7 +107,7 @@ const EditPost = () => {
 
 
   return (
-    <>
+    <AuthWrapper>
       <Container component="main" maxWidth="xs">
         <Box
           sx={{
@@ -218,7 +219,7 @@ const EditPost = () => {
           </Box>
         </Box>
       </Container>
-    </>
+    </AuthWrapper>
   )
 }
 

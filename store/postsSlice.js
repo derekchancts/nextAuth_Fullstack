@@ -133,10 +133,35 @@ export const postLike = createAsyncThunk(
     } catch (error) {
       console.log(error);
       // return rejectWithValue(error.response.data)
-      return rejectWithValue("an error occurred")
+      // return rejectWithValue("an error occurred")
+      const payload = error.response && error.response.data.error ? error.response.data.error : error.message;
+      return rejectWithValue(payload)
     }
   }
 );
+
+
+//! pagination
+export const postsPagination = createAsyncThunk(
+  "posts/postsPagination",
+  async (number, { rejectWithValue }) => {
+    console.log(number)
+    // console.log(typeof(number))
+
+    try {
+      const { data } = await axios.get(`/api/posts/paginate/${number}`)
+      console.log(data)
+      return data;
+    } catch (error) {
+      console.log(error);
+      // return rejectWithValue(error.response.data)
+      // return rejectWithValue("an error occurred")
+      const payload = error.response && error.response.data.error ? error.response.data.error : error.message;
+      return rejectWithValue(payload)
+    }
+  }
+);
+
 
 
 
@@ -230,6 +255,19 @@ export const postsSlice = createSlice({
       state.loading = 'rejected'
       state.error = action.payload
     })
+
+    .addCase(postsPagination.pending, (state, action) => {
+      state.loading = 'pending'
+    })
+    .addCase(postsPagination.fulfilled, (state, action) => {
+      state.posts = action.payload.posts
+      state.count = action.payload.count
+      state.loading = 'success'
+    })
+    .addCase(postsPagination.rejected, (state, action) => {
+      state.loading = 'rejected'
+      state.error = action.payload
+    })
   }
 
   // extraReducers: {
@@ -261,5 +299,6 @@ export const { clearPosts, resetStatus } = postsSlice.actions;
 export const selectPosts = (state) => state.posts.posts;
 export const selectPostsLoading = (state) => state.posts.loading;
 export const selectPostsError = (state) => state.posts.error;
+export const selectPostsCount = (state) => state.posts.count;
 
 export default postsSlice.reducer;

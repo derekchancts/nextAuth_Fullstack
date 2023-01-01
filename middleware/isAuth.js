@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
 import { getSession } from "next-auth/react"
 import User from '../model/userModel'
-import { ObjectId } from 'mongodb'
+// import { ObjectId } from 'mongodb'
 import mongoose from "mongoose"
 
 
@@ -100,6 +100,8 @@ import mongoose from "mongoose"
 
 
 const Authenticated = (component) => async (req, res) => {
+
+  //! if user logs in using Oauth
   // const session = await getSession({ req });
   const session = await getSession({ req });
   // console.log({session})
@@ -107,12 +109,12 @@ const Authenticated = (component) => async (req, res) => {
   if (session) {
     const user = await User.findOne({ email: session?.user?.email })
     // console.log(user)
-
     req.user = user
     return component(req, res)
   }
 
-  
+
+  //! if user logs in using email and password
   // console.log('test2')
   // console.log("here", req.headers)
   // console.log(req.headers.authorization)
