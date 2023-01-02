@@ -233,6 +233,8 @@ function Form({ post, setUpdatePost }) {
                   autoComplete="Message"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
+                  multiline
+                  rows={4}
                 />
               </Grid>
 

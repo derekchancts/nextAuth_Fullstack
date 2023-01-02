@@ -43,7 +43,10 @@ const handler = Authenticated(async (req, res) => {
         allowed_formats: ['png', 'jpg', 'jpeg', 'svg', 'ico', 'jfif', 'webp'],
       },
       function (error, result) {
-        if (error) console.log(error)
+        if (error) {
+          console.log(error)
+          return res.status(409).json({ error: error.message })
+        }
         
         // console.log(result)
         post.image = result.public_id;
@@ -70,7 +73,10 @@ const handler = Authenticated(async (req, res) => {
       // const newPost = await Post.create(req.body.postData)  // 2nd method to create post
       // const newPost = await Post.create(post)  // 2nd method to create post
 
+      // const updatedPosts = await Post.find({})
+
       return res.status(201).json(newPost)
+      // return res.status(201).json(updatedPosts)
     } catch (err) {
       return res.status(409).json({ error: err.message })
     }

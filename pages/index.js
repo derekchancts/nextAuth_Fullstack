@@ -28,6 +28,7 @@ import {
 import PostCard from "../components/posts/PostCard";
 import { selectPosts, postsFetch } from '../store/postsSlice'
 import AuthWrapper from "../components/auth/authWrapper";
+import { ConfirmProvider } from "material-ui-confirm";
 
 
 
@@ -109,9 +110,9 @@ export default function Component({ session }) {
             <h1>Profile </h1>
 
             {/* <Button variant="outlined" color="secondary"> */}
-              <Link href="/src/user/author" variant="body2" style={{ textDecoration: 'none' }}>
+              {/* <Link href="/src/user/author" variant="body2" style={{ textDecoration: 'none' }}>
                 To Author Page
-              </Link>
+              </Link> */}
             {/* </Button> */}
             
 

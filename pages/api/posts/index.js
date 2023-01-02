@@ -24,6 +24,7 @@ export default async function handler (req, res) {
   if (req.method === "GET") {
     try {
       const posts = await Post.find({})
+      // const posts = await Post.find({}).sort({ _id: -1 })
       // console.log(posts)
 
       return res.status(200).json(posts)

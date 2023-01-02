@@ -17,6 +17,8 @@ import "react-toastify/dist/ReactToastify.css"
 import { wrapper } from "../store/store";
 import { Provider } from "react-redux";
 
+import { ConfirmProvider } from "material-ui-confirm";
+
 
 // function MyApp({ Component, pageProps }) {
 //   return <Component {...pageProps} />
@@ -98,21 +100,23 @@ export default wrapper.withRedux(MyApp);
         </Head>
   
         <ThemeProvider theme={theme}>
-          <Provider store={store}>
-          {/* <CacheProvider value={emotionCache}> */}
-            <SessionProvider session={pageProps.session}>
-              <Layout>
-                <ToastContainer 
-                  theme="dark"
-                  autoClose={3000}
-                  hideProgressBar={true}
-                  closeOnClick
-                />
-                <Component {...pageProps} />
-              </Layout>
-            </SessionProvider>
-            {/* </CacheProvider> */}
-          </Provider>
+          <ConfirmProvider>
+            <Provider store={store}>
+            {/* <CacheProvider value={emotionCache}> */}
+              <SessionProvider session={pageProps.session}>
+                <Layout>
+                  <ToastContainer 
+                    theme="dark"
+                    autoClose={3000}
+                    hideProgressBar={true}
+                    closeOnClick
+                  />
+                  <Component {...pageProps} />
+                </Layout>
+              </SessionProvider>
+              {/* </CacheProvider> */}
+            </Provider>
+          </ConfirmProvider>
           <CssBaseline />
         </ThemeProvider>
       </>

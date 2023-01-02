@@ -12,7 +12,7 @@ import {
   TextField,
   FormControlLabel,
   Checkbox,
-  Link as muiLink,
+  // Link,
   Grid,
   Box,
   Typography,
@@ -28,6 +28,7 @@ import { parseCookies } from "nookies";
 import { useSession } from "next-auth/react";
 import AuthWrapper from '../../../components/auth/authWrapper';
 import Paginate from '../../../components/pagination/BackendPagination';
+
 
 
 
@@ -70,9 +71,9 @@ const Posts = () => {
 
 
 
-  // useEffect(() => {
-  //   if (currentUser && currentUser.length !== 0) dispatch(postsFetch());
-  // }, [currentUser, router, dispatch])
+  useEffect(() => {
+    if (currentUser && currentUser.length !== 0) dispatch(postsFetch());
+  }, [currentUser, router, dispatch])
 
 
 
@@ -83,8 +84,11 @@ const Posts = () => {
           display: "flex" ,
           width: '100vw' ,
           height: '90vh' ,
+          // height: '500px',
+          // width: '500px',
           alignItems: 'center',
           justifyContent: 'center',
+          // backgroundColor: "lightblue"
         }}
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
@@ -96,6 +100,24 @@ const Posts = () => {
           </Link>
         </Box>
 
+        {/* <Grid 
+          container 
+          direction="column"
+          justifyContent="center"
+          alignItems="center" 
+          spacing={2}
+        >
+          <Grid item xs={12}>
+            <Typography component="h1" variant="h4">
+              Please log in to see posts
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Link href="/src/user/login" passHref style={{ textDecoration: 'none' }} >
+              <Button variant="contained" fullWidth sx={{ mt: '1rem' }}>Go to Login Page</Button>
+            </Link>
+          </Grid>
+        </Grid> */}
       </Box>
     )
   }
@@ -120,6 +142,20 @@ const Posts = () => {
   )}
   
   
+  // if (postsError) {
+  //   return (
+  //     <Box sx={{ 
+  //       mt: '2rem',
+  //       display: "flex",
+  //       flexDirection: "column",
+  //       alignItems: "center",
+  //     }}>
+  //       <Typography component="h1" variant="h4">
+  //         {postsError}
+  //       </Typography>
+  //     </Box> 
+  // )}
+
   if (postsError) {
     toast.error(postsError)
     dispatch(resetStatus())
@@ -128,7 +164,7 @@ const Posts = () => {
 
   return (
     <AuthWrapper>
-      {/* <ConfirmProvider> */}
+      <ConfirmProvider>
         <Container component="main" maxWidth="lg">
           <>
           <Box sx={{ 
@@ -146,9 +182,8 @@ const Posts = () => {
             <Grid item xs={12}>
               <Grid container justifyContent="center" spacing={2}>
                 {posts && posts.map(post => (
-                  // <Link key={post._id} href={`/src/posts/${post._id}`}>
-                    <PostCard key={post._id} post={post} />
-                  // </Link>
+                  // <PostCard key={post._id} post={post} setUpdatePost={setUpdatePost} />
+                  <PostCard key={post._id} post={post} />
                 ))}  
               </Grid>
             </Grid>
@@ -160,14 +195,9 @@ const Posts = () => {
           )} */}
 
 
-          <Grid item xs={4}>
-            <Paginate />
-          </Grid> 
-
-
           </>
         </Container>
-      {/* </ConfirmProvider> */}
+      </ConfirmProvider>
     </AuthWrapper>
   )
 }

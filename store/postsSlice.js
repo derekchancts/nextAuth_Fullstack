@@ -46,7 +46,9 @@ export const postAdd = createAsyncThunk(
     } catch (error) {
       console.log(error);
       // return rejectWithValue(error.response.data)
-      return rejectWithValue("an error occurred")
+      // return rejectWithValue("an error occurred")
+      const payload = error.response && error.response.data.error ? error.response.data.error : error.message;
+      return rejectWithValue(payload)
     }
   }
 );
@@ -145,12 +147,12 @@ export const postLike = createAsyncThunk(
 export const postsPagination = createAsyncThunk(
   "posts/postsPagination",
   async (number, { rejectWithValue }) => {
-    console.log(number)
+    // console.log(number)
     // console.log(typeof(number))
 
     try {
       const { data } = await axios.get(`/api/posts/paginate/${number}`)
-      console.log(data)
+      // console.log(data)
       return data;
     } catch (error) {
       console.log(error);
@@ -188,6 +190,7 @@ export const postsSlice = createSlice({
       state.error = null
     },
   },
+
   extraReducers: (builder) => {
     builder
     .addCase(postsFetch.pending, (state, action) => {
@@ -206,7 +209,8 @@ export const postsSlice = createSlice({
       state.loading = 'pending'
     })
     .addCase(postAdd.fulfilled, (state, action) => {
-      state.posts.push(action.payload)
+      // state.posts.push(action.payload)   
+      state.posts.unshift(action.payload)   
       state.loading = 'success'
     })
     .addCase(postAdd.rejected, (state, action) => {

@@ -208,24 +208,39 @@ const PostCard = ({ post }) => {
           
           
           {/* {router.pathname === '/src/posts/posts' && ( */}
-        {post.userId === user._id && (
-          <Grid container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: '10px'}} gap={2}>
+        {post.userId === user._id ? (
+          <Grid container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: '10px'}} gap={1}>
 
-           <Link 
-             href={{
-               pathname: "/src/posts/editPost",
-               query: { id: post._id },
-             }}
-             >
               <Button 
-                size="small" 
+                size="small"
                 variant="outlined"
-                // onClick={() => updatePost(post._id)} 
-                sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                onClick={() => router.push(`/src/posts/${post._id}`)} 
+              > View Details
+              </Button>
+          
+              <Link 
+                href={{
+                  pathname: "/src/posts/editPost",
+                  query: { id: post._id },
+                }}>
+                <Button 
+                  size="small" 
+                  variant="outlined"
+                  color="success"
+                  // onClick={() => updatePost(post._id)} 
+                  sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                > Update
+                </Button>
+              </Link> 
+
+              {/* <Button 
+                size="small"
+                variant="outlined"
+                color="success"
+                onClick={() => router.push('/src/posts/editPost')} 
               > Update
               </Button>
-            </Link>
-     
+          */}
               <Button 
                 size="small"
                 variant="outlined"
@@ -234,15 +249,19 @@ const PostCard = ({ post }) => {
                 // sx={{ mr: "0.5rem" }} 
               > Delete
               </Button>
-
-              {/* <Button variant="outlined" sx={{height: 30, m: 1, p: 1}}>
-                <Stack direction="column" alignItems="center" justifyContent={"center"}>
-                  <Typography>Saved</Typography>
-                </Stack>
-              </Button> */}
            
           </Grid>
-        )} 
+        ) : (
+          <Grid container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: '10px'}} gap={1}>
+              <Button 
+                size="small"
+                variant="outlined"
+                onClick={() => router.push(`/src/posts/${post._id}`)} 
+              > View Details
+              </Button>
+            </Grid>
+        )
+      } 
 
         </Grid>
       </CardActions>

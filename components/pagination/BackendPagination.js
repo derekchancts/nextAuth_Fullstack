@@ -30,7 +30,11 @@ const Paginate = () => {
 
 
   const posts = useSelector(selectPosts);
-  // console.log({posts})
+  console.log({posts})
+
+//  const sortedPosts = posts.sort((a, b) => b.createdAt - a.createdAt)
+  // consoel.log({sortedPosts})
+
 
   const postsCount = useSelector(selectPostsCount);
   // console.log({postsCount})
@@ -42,7 +46,7 @@ const Paginate = () => {
 
 
   const handleChange = async (e, page) => {
-    console.log({ page });
+    // console.log({ page });
     setPage(page);
 
     try {
@@ -65,9 +69,9 @@ const Paginate = () => {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <Paper sx={{ borderRadius: 4, mt: '1rem' }} elevation={6}>
+      <Paper sx={{ borderRadius: 4 }} elevation={3}>
         <Pagination
-          color="secondary"
+          color="primary"
           // count={10}
           count={(posts && Number(postsCount)) || 1}
           // onChange={e => {
@@ -75,9 +79,7 @@ const Paginate = () => {
           //   handleChange(e.target.textContent)
           // }}
           onChange={handleChange}
-          renderItem={item => (
-            <PaginationItem {...item} />
-          )}
+          renderItem={item => <PaginationItem {...item} />}
           // page={page}
           sx={{
             width: "100%",
@@ -85,6 +87,7 @@ const Paginate = () => {
             justifyContent: "center",
             marginTop: 10,
             marginBottom: 10,
+            padding: '3px'
           }}
         />
       </Paper>
