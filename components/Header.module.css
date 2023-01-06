@@ -1,0 +1,77 @@
+.menuToggle {
+  position: absolute;
+  top: 20%;
+  right: 5%;
+  /* z-Index: 2000; */
+}
+
+.menuToggle .bar {
+  width: 25px;
+  height: 3px;
+  margin: 5px auto;
+  transition: all .3s ease-in-out;
+  background:white;
+  /* color: white; */
+  display: block;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.menuToggle .bar.line1 {
+  transform: rotate(45deg); 
+  margin-top: 15px;
+  /* background: yellow; */
+}
+
+.menuToggle .bar.line2 {
+  /* transform: scaleY(0);  */
+  opacity: 0;
+  transform: rotate(45deg);
+}
+
+.menuToggle .bar.line3 {
+  transform: rotate(-45deg);
+  margin-top: -16px;
+}
+
+.navMenu {
+  /* display: none; */
+  list-style-type: none;
+
+  display: grid;
+  grid-template-columns: auto;
+  /* grid-template-rows: auto; */
+  /* background: #f9423d; */
+  margin: 0;
+  width: 100%;
+  position: absolute;
+  top: 56px;
+  left: -100%;
+  opacity: 0;
+  transition: all .5s ease;
+  text-align: center;
+  padding-left: 0;
+  z-Index: 10;
+}
+
+.navMenu.show-menu {
+  /* display: block; */
+  background: #2196f3;
+  left: 0;
+  opacity: 1;
+  transition: all .5s ease;
+}
+
+.navMenu li {
+  height: 3rem;
+}
+
+.navMenu li a {
+  /* align-self: center;
+  justify-self: center; */
+}
+
+.navLinks:hover {
+  color: orangered;
+  transition: all .2s ease-out;
+}

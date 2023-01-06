@@ -18,21 +18,21 @@ const cors = initMiddleware(
 
 
 
-const handler = Authenticated(async (req, res) => { 
+const handler = Authenticated(async (req, res) => {
   // Run cors
   await cors(req, res)
 
-  
+
   if (req.method === 'POST') {
     // console.log(req.user)
     if (!req.user) return res.status(404).json({ error: "Please login" })
-    
+
     // const post = req.body.postData;
     req.body.postData.userId = req.user._id.toString()  // req.user._id is an object. so need to turn it to a string
 
     const post = req.body.postData
     console.log('Post: ' + post)
-    
+
 
     const { image } = req.body.postData;
 
@@ -47,7 +47,7 @@ const handler = Authenticated(async (req, res) => {
           console.log(error)
           return res.status(409).json({ error: error.message })
         }
-        
+
         // console.log(result)
         post.image = result.public_id;
         post.imageUrl = result.secure_url;
@@ -62,11 +62,11 @@ const handler = Authenticated(async (req, res) => {
         // } catch (err) {
         //   console.log(err)
         // }
-    });
+      });
 
     // const newPost = new Post(req.body.postData)
     const newPost = await new Post(post)
-    
+
     try {
       await newPost.save()
 

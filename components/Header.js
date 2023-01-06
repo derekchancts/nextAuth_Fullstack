@@ -1,3 +1,4 @@
+import styles from './Header.module.css'
 import React, { useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -18,6 +19,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser, authFetch, logoutUser, selectCurrentUser } from '../store/authSlice'
 import { clearPosts } from '../store/postsSlice'
 
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
 
 
 export default function ButtonAppBar() {
@@ -27,12 +31,17 @@ export default function ButtonAppBar() {
   const [currentUser, setcurrentUser] = useState('');
   // console.log({ currentUser })
 
+  const [isActive, setIsActive] = useState(false);
+
   const { data: session } = useSession();
   // console.log({session})
 
   const cookies = parseCookies();
   // console.log({ cookies })
 
+  const theme = useTheme()
+  let xsmallbreakPoint = useMediaQuery(theme.breakpoints.up('sm'));
+  let xxsmallbreakPoint = useMediaQuery(theme.breakpoints.down('sm'));
 
 
   useEffect(() => {
@@ -44,7 +53,6 @@ export default function ButtonAppBar() {
     
     setcurrentUser(user)
   }, [cookies.user, session, dispatch])
-
 
 
 
@@ -61,6 +69,11 @@ export default function ButtonAppBar() {
     router.push('/src/user/login')
   };
 
+
+
+  const handleClick = e => {
+    setIsActive(current => !current);
+  };
 
 
   return (
@@ -80,21 +93,51 @@ export default function ButtonAppBar() {
             </Link>
           </IconButton>
 
+          {/* {xsmallbreakPoint && (
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              {currentUser && <p> user: {currentUser.name} </p>}
+            </Typography>
+          )}         */}
+
+        {xxsmallbreakPoint && (
+          //  <div className={`${styles.menuToggle} ${isActive ? `${styles.bgYellow}`: ''}`}  onClick={handleClick}>
+           <div className={`${styles.menuToggle}`} onClick={() => setIsActive(current => !current)}>
+            <span className={`${styles.bar} ${isActive ? `${styles.line1}`: ''}` }></span>
+            <span className={`${styles.bar} ${isActive ? `${styles.line2}`: ''}`}></span>
+            <span className={`${styles.bar} ${isActive ? `${styles.line3}`: ''}`}></span>
+          </div>
+        )}
+
+
+      {xxsmallbreakPoint && currentUser && (    
+        // <ul className={`${styles.navMenZu} ${isActive ? `${styles.showMenu}` : ''} ` }>
+        <ul className={`${styles.navMenu} ${isActive ? `${styles['show-menu']}` : ''} ` }>
+          <li><Link href="/" passHref className={styles.navLinks}>Home</Link></li>
+          <li><Link href="/src/posts/posts" passHref className={styles.navLinks}>Posts</Link></li>
+          <li><Link href="/src/posts/addpost"className={styles.navLinks}>Add Post</Link></li>
+          <li><Link href="#" onClick={() => logoutHandler()} className={styles.navLinks}>Logout</Link></li>
+        </ul>  
+      )}
+
+
+      {xxsmallbreakPoint && !currentUser && (
+        <ul className={`${styles.navMenu} ${isActive ? `${styles['show-menu']}` : ''} ` }>
+          <li><Link href="/src/user/login" passHref className={styles.navLinks}>Login</Link></li>
+          <li><Link href="/src/user/register" passHref className={styles.navLinks}>Register</Link></li>
+        </ul>
+       )}
+
         
+
+        {xsmallbreakPoint && (
+          <>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {currentUser && <p> user: {currentUser.name} </p>}
-          </Typography>
+          </Typography> 
 
-          {/* <Link href="/src/user/author" passHref style={{ textDecoration: 'none' }} >
-            <Button sx={{ color: 'white'}}>Author</Button>
-          </Link> */}
-
-          <Box sx={{ ml: 2 }}>
+          <Box sx={{ ml: 2, flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
             {currentUser ? (
               <>
-                {/* <Link href="/src/posts/paginatePosts" passHref style={{ textDecoration: 'none' }} >
-                  <Button sx={{ color: 'white'}}>Pagination</Button>
-                </Link> */}
                 <Link href="/src/posts/posts" passHref style={{ textDecoration: 'none' }} >
                   <Button sx={{ color: 'white'}}>Posts</Button>
                 </Link>
@@ -114,6 +157,9 @@ export default function ButtonAppBar() {
               </>
             )}
           </Box>
+
+          </>
+        )}
 
         </Toolbar>
       </AppBar>

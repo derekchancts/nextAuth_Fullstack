@@ -128,46 +128,44 @@ const Posts = () => {
 
   return (
     <AuthWrapper>
-      {/* <ConfirmProvider> */}
-        <Container component="main" maxWidth="lg">
-          <>
-          <Box sx={{ 
-            mt: '2rem',
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}>
-            <Typography component="h1" variant="h4">
-              Posts
-            </Typography>
-          </Box> 
+      <Container component="main" maxWidth="lg">
+        <>
+        <Box sx={{ 
+          mt: '2rem',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}>
+          <Typography component="h1" variant="h4">
+            Posts
+          </Typography>
+        </Box> 
 
-          <Grid sx={{ flexGrow: 1, mt: '1rem' }} container maxWidth="xl" spacing={2}>
-            <Grid item xs={12}>
-              <Grid container justifyContent="center" spacing={2}>
-                {posts && posts.map(post => (
-                  // <Link key={post._id} href={`/src/posts/${post._id}`}>
-                    <PostCard key={post._id} post={post} />
-                  // </Link>
-                ))}  
-              </Grid>
+        <Grid sx={{ flexGrow: 1, mt: '1rem' }} container maxWidth="xl" spacing={2}>
+          <Grid item xs={12}>
+            <Grid container justifyContent="center" spacing={2}>
+              {posts && posts.map(post => (
+                // <Link key={post._id} href={`/src/posts/${post._id}`}>
+                  <PostCard key={post._id} post={post} />
+                // </Link>
+              ))}  
             </Grid>
           </Grid>
+        </Grid>
 
 
-          {/* {PageTotal > 1 && (
-            <CustomPagination setPage={setPage} numOfPages={PageTotal} />
-          )} */}
+        {/* {PageTotal > 1 && (
+          <CustomPagination setPage={setPage} numOfPages={PageTotal} />
+        )} */}
 
 
-          <Grid item xs={4}>
-            <Paginate />
-          </Grid> 
+        <Grid item xs={4}>
+          <Paginate />
+        </Grid> 
 
 
-          </>
-        </Container>
-      {/* </ConfirmProvider> */}
+        </>
+      </Container>
     </AuthWrapper>
   )
 }

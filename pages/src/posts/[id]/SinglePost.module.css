@@ -2,3 +2,19 @@
   text-align: justify;
   text-justify: inter-word;
 }
+
+
+@media (max-width: 900px) {
+  .content {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+}
+
+
+@media (max-width: 600px) {
+  .content {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}
