@@ -38,7 +38,7 @@ const handler = Authenticated(async (req, res) => {
 
     const upload = await cloudinary.uploader.upload(image,
       {
-        upload_preset: 'dev_setups8',
+        upload_preset: 'dev_setups9',
         // public_id: `${username}avatar`,
         allowed_formats: ['png', 'jpg', 'jpeg', 'svg', 'ico', 'jfif', 'webp'],
       },
