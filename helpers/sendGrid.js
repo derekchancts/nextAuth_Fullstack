@@ -80,7 +80,7 @@ import sendgrid from "@sendgrid/mail";
 
 sendgrid.setApiKey(process.env.EMAIL_SERVER_PASSWORD);
 
-
+ 
 // export async function sendGrid(req, res) {
 export async function sendGrid(mailOptions) {
   const { req, res } = mailOptions; 
