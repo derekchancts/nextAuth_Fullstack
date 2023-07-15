@@ -1,7 +1,8 @@
 import User from "../../../model/userModel"
 import jwt from "jsonwebtoken"
 import absoluteUrl from "next-absolute-url"
-import { sendEmail } from "../../../helpers/sendEmail"
+// import { sendEmail } from "../../../helpers/sendEmail"
+import { sendGrid } from "../../../helpers/sendGrid"
 // import { sendGrid } from '../../../helpers/sendGrid'
 // import { sendInBlue } from '../../../helpers/sendinblue'
 
@@ -33,7 +34,8 @@ export default async function handler(req, res) {
 
       // console.log("message", message)
 
-      await sendEmail({
+      // await sendEmail({
+      await sendGrid({
         to: user.email,
         subject: "Password Reset",
         text: message,

@@ -2,7 +2,8 @@ import User from "../../../model/userModel"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import absoluteUrl from "next-absolute-url"
-import { sendEmail } from "../../../helpers/sendEmail"
+// import { sendEmail } from "../../../helpers/sendEmail"
+import { sendGrid } from "../../../helpers/sendGrid"
 
  
 
@@ -32,7 +33,8 @@ export default async function handler (req, res) {
 
       // console.log("here")
 
-      await sendEmail({
+      // await sendEmail({
+      await sendGrid({
         to: user.email,
         subject: "Email Verification",
         text: message,

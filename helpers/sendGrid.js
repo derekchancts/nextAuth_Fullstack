@@ -43,32 +43,62 @@
 
 
 
-import mail from '@sendgrid/mail'
+// import mail from '@sendgrid/mail'
 
 
-mail.setApiKey(process.env.EMAIL_SERVER_PASSWORD);
+// mail.setApiKey(process.env.EMAIL_SERVER_PASSWORD);
 
 
 
-export const sendGrid = (options) => { 
+// export const sendGrid = (options) => { 
+//   console.log({options})
 
-  const { req, res } = options; 
+//   const { req, res } = options; 
 
-  const mailOptions = {
-    from: process.env.EMAIL_FROM,
-    to: options.to,
-    subject: options.subject,
-    html: options.text,
+//   const mailOptions = {
+//     from: process.env.EMAIL_FROM,
+//     to: options.to,
+//     subject: options.subject,
+//     html: options.text,
+//   }
+
+//   mail.send(mailOptions)
+//   .then(() => {
+//     // res.status(200).json({ status: 'Ok' })
+//     console.log('ok')
+//   })
+//   .catch(err => {
+//     console.log(err)
+//     // res.status(400).json({ error: err })
+//   })
+
+// }
+
+
+
+import sendgrid from "@sendgrid/mail";
+
+sendgrid.setApiKey(process.env.EMAIL_SERVER_PASSWORD);
+
+
+// export async function sendGrid(req, res) {
+export async function sendGrid(mailOptions) {
+  const { req, res } = mailOptions; 
+
+  try {
+    // console.log("REQ.BODY", req.body);
+    await sendgrid.send({
+      to: mailOptions.to,
+      from: process.env.EMAIL_FROM,
+      subject: mailOptions.subject,
+      html: mailOptions.text,
+    });
+  } catch (error) {
+    console.log(error);
+    // return res.status(error.statusCode || 500).json({ error: error.message });
   }
 
-  mail.send(mailOptions)
-  .then(() => {
-    // res.status(200).json({ status: 'Ok' })
-    console.log('ok')
-  })
-  .catch(err => {
-    console.log(err)
-    // res.status(400).json({ error: err })
-  })
-
+  // return res.status(200).json({ error: "" });
 }
+
+// export default sendGrid;

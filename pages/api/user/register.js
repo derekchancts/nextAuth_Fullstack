@@ -3,7 +3,8 @@ import bcrypt from 'bcryptjs'
 import User from '../../../model/userModel'
 import jwt from "jsonwebtoken"
 import absoluteUrl from "next-absolute-url"
-import { sendEmail } from '../../../helpers/sendEmail'
+import { sendGrid } from '../../../helpers/sendGrid'
+// import { sendEmail } from '../../../helpers/sendEmail'
 // import { sendInBlue } from '../../../helpers/sendInBlue'
 
 
@@ -51,7 +52,8 @@ export default async function handler(req, res) {
       const message = `<div>Click on the link below to verify your email, if the link is not working then please paste into the browser.</div></br>
     <div>${link}</div>`
 
-      await sendEmail({
+      // await sendEmail({
+      await sendGrid({
         to: newUser.email,
         subject: "Email Verification",
         text: message,
